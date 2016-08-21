@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>ES6 Quiz</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                max-width: 40rem;
+                margin: 1rem auto 5rem;
+            }
+            ul {
+                padding-left: 0;
+            }
+            li {
+                list-style: none;
+            }
+            label {
+                display: block;
+                line-height: 1.8em;
+            }
+            .score {
+                border-top: 1px solid magenta;
+                padding: 1em;
+                display: none;
+            }
+        </style>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/default.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/js-yaml/3.6.1/js-yaml.js"></script>
+    </head>
+    <body>
+        <div class="wrapper"></div>
+        <div class="result">
+            <h3 class="score">Your Score <output></output></h3>
+            <button onclick="showScore();">Show Score</button>
+        </div>
+        <script>
+            'use strict';
+
+            const wrapper = document.querySelector('.wrapper');
+            let correctAnswers = [];
+
+            fetch('./questions.yaml')
+                .then(resp => resp.text())
+                .then(jsyaml.safeLoad)
+                .then(makeQuestions);
+
+            function makeQuestions(questions = []) {
+                questions.forEach((question, id) => {
+                    correctAnswers.push(question.answer);
+                    const el = document.createElement('section');
+                    el.innerHTML = `
+                        <h4>${question.title}</h4>
+                        <pre><code>${question.code}</code></pre>
+                        <ul>
+                        ${
+                            question.answers.map(answer=> {
+                                return `
+                                    <li>
+                                        <label>
+                                            <input type="radio" name="q-id-${id}">
+                                            <span>${answer}<span/>
+                                        </label>
+                                    </li>
+                                `;
+                            }).join('')
+                        }
+                        </ul>
+                    `;
+                    wrapper.appendChild(el);
+                });
+                hljs.initHighlighting();
+            }
+            function showScore() {
+                const output = document.querySelector('output');
+                const corrects = correctAnswers.reduce((allCorrect, correctAnswer, id)=> {
+                    if (document.querySelector(`input[name="q-id-${id}"]`).checked) {
+                        allCorrect++;
+                    }
+                    return allCorrect;
+                }, 0);
+                output.value = `${corrects}/${correctAnswers.length}`;
+                document.querySelector('.score').style.display = 'block';
+            }
+        </script>
+    </body>
+</html>

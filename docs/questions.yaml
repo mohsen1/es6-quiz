@@ -1,0 +1,125 @@
+-
+    title: Template string
+    code: |
+        const cond = false;
+        let str = '';
+        console.log(`
+            ${
+                if(cond) {
+                    str = 'ya'
+                } else {
+                    str = 'nay'
+                }
+            }
+            ${ str }
+        `);
+    answers:
+        - Throws error
+        - ya
+        - nay
+    answer: 0
+
+-
+    title: 'Default parameter'
+    code: |
+        function foo(user) {
+            return function(name = user.name) {
+                console.log(`user name is ${ user.name }`);
+            }
+        }
+        foo({name: 'Mario'})()
+    answers:
+        - User name is Mario
+        - User name is
+    answer: 0
+-
+    title: Default parameter
+    code: |
+        function foo(param=1) {
+            console.log(arguments.length)
+        }
+        foo();
+
+    answers:
+        - 0
+        - 1
+    answer: 0
+-
+    title: for..of
+    code: |
+        var array = [1,2,3,4];
+        for (const item of array) {
+            console.log(item);
+        }
+    answers:
+        - 1, Uncaught TypeError: Assignment to constant variable
+        -  1 , 2, 3, 4
+    answer: 1
+
+-
+    title: "iteratables: Which `arrayLike` will iterate?"
+    code: |
+        var arrayLike1 = {0: 'foo', 1: 'bar', [Symbol.iterator]: Array.prototype[Symbol.iterator]};
+        var arrayLike2 = {0: 'foo', 1: 'bar', [Symbol.iterator]: Array.prototype[Symbol.iterator], length: 2};
+        var arrayLike3 = {0: 'foo', 1: 'bar', length: 2};
+        var arrayLike4 = {0: 'foo', 1: 'bar'}
+        for (var item of arrayLike) { console.log(item); }
+
+    answers:
+        - '1 & 2'
+        - '2 & 3'
+        - '2'
+        - '1 & 2 & 3 & 4'
+    answer: 2
+-
+    title: Computed properties
+    code: |
+        var obj = {
+            [String(obj)]: 3.14
+        }
+        console.log(obj);
+    answers:
+        - "Throws `VM2263:1 Uncaught ReferenceError: obj is not defined`"
+        - "`{'[object Object]': 3.14}`"
+        - "`{'undefined': 3.14}`"
+        - "`{}`"
+    answer: 2
+-
+    title: Computed properties
+    code: |
+        const obj = {
+            foo: 'foo',
+            [this.foo]: 3.14
+        };
+        console.log(obj);
+    answers:
+        - "`{foo: 3.14}`"
+        - "`{foo: 'foo'}`"
+        - "`{foo: 'foo', 'undefined': 3.14}`"
+        - Throws
+    answer: 1
+-
+    title: Object and array destructuring
+    code: |
+        var o = {foo: {bar: 1}};
+        var {bar = {foo} = o} = o;
+        console.log(bar);
+    answers:
+        - "`{bar: 1}`"
+        - "`{foo: {bar: 1}}`"
+        - "`undefined`"
+        - Throws `ReferenceError: bar is not defined`
+    answer: 1
+-
+    title: Class
+    code: |
+        class Foo {
+            static f() { return this.getName() }
+            static getName() { return 'FooBar' }
+        }
+        Foo.f()
+    answers:
+        - 'FooBar'
+        - Throws `this.getName is not a function`
+        - Throws `Foo.f is not a function`
+    answer: 0
