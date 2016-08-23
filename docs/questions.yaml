@@ -24,13 +24,13 @@
     code: |
         function foo(user) {
             return function(name = user.name) {
-                console.log(`user name is ${ user.name }`);
+                console.log(`user name is ${ name }`);
             }
         }
         foo({name: 'Mario'})()
     answers:
         - User name is Mario
-        - User name is
+        - User name is undefined
     answer: 0
 -
     title: Default parameter
@@ -52,8 +52,8 @@
             console.log(item);
         }
     answers:
-        - 1, Uncaught TypeError: Assignment to constant variable
-        -  1 , 2, 3, 4
+        - "1, Uncaught TypeError: Assignment to constant variable"
+        - "1 , 2, 3, 4"
     answer: 1
 
 -
@@ -79,7 +79,7 @@
         }
         console.log(obj);
     answers:
-        - "Throws `VM2263:1 Uncaught ReferenceError: obj is not defined`"
+        - "Throws `Uncaught ReferenceError: obj is not defined`"
         - "`{'[object Object]': 3.14}`"
         - "`{'undefined': 3.14}`"
         - "`{}`"
@@ -96,7 +96,7 @@
         - "`{foo: 3.14}`"
         - "`{foo: 'foo'}`"
         - "`{foo: 'foo', 'undefined': 3.14}`"
-        - Throws
+        - "Throws an error"
     answer: 1
 -
     title: Object and array destructuring
@@ -120,6 +120,6 @@
         Foo.f()
     answers:
         - 'FooBar'
-        - Throws `this.getName is not a function`
-        - Throws `Foo.f is not a function`
+        - 'Throws `this.getName is not a function`'
+        - 'Throws `Foo.f is not a function`'
     answer: 0
